@@ -101,3 +101,22 @@ module roundenc(
         endcase
     endfunction
 endmodule
+
+module keyschedule128(
+    input [127:0] key,
+    input [4:0] round,
+    output [127:0] nextkey
+);
+    assign nextkey = {sbox(key[66:63]), sbox(key[62:59]), key[58:6], key[5:1]^round, key[0], key[127:67]};
+
+    function [3:0] sbox;
+        input [3:0] x;
+        case (x)
+            4'h0:sbox = 4'hc;  4'h1:sbox = 4'h5;   4'h2:sbox = 4'h6;   4'h3:sbox = 4'hb;
+            4'h4:sbox = 4'h9;  4'h5:sbox = 4'h0;   4'h6:sbox = 4'ha;   4'h7:sbox = 4'hd;
+            4'h8:sbox = 4'h3;  4'h9:sbox = 4'he;   4'ha:sbox = 4'hf;   4'hb:sbox = 4'h8;
+            4'hc:sbox = 4'h4;  4'hd:sbox = 4'h7;   4'he:sbox = 4'h1;   4'hf:sbox = 4'h2;
+        endcase
+    endfunction
+
+endmodule
